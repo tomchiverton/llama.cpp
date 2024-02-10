@@ -194,6 +194,15 @@
         background-color: black;
       }
     }
+
+    #write{
+      margin-bottom: 10px;
+    }
+
+    .config.started-true,
+    .log.started-false{
+      display: none;
+    }
   </style>
 
   <script type="module">
@@ -551,7 +560,7 @@
           </div>
           <div class="right">
             <button type="submit" disabled=${generating.value}>Send</button>
-            <button onclick=${uploadImage}>Upload Image</button>
+            <button onclick=${uploadImage} disabled>Upload Image</button>
             <button onclick=${stop} disabled=${!generating.value}>Stop</button>
             <button onclick=${reset}>Reset</button>
           </div>
@@ -565,7 +574,7 @@
         runCompletion();
       }
       return html`
-        <div>
+        <div class="right">
           <button onclick=${submit} type="button" disabled=${generating.value}>Start</button>
           <button onclick=${stop} disabled=${!generating.value}>Stop</button>
           <button onclick=${reset}>Reset</button>
@@ -1004,13 +1013,17 @@
             <h1>llama.cpp</h1>
           </header>
 
-          <main id="content">
-            <${chatStarted.value ? ChatLog : ConfigForm} />
+          <main class="log started-${chatStarted.value}">
+            <${chatStarted.value ? ChatLog : 'br'} />
           </main>
 
           <section id="write">
             <${session.value.type === 'chat' ? MessageInput : CompletionControls} />
           </section>
+
+          <main class="config started-${chatStarted.value}">
+            <${chatStarted.value ? 'br' : ConfigForm} />
+          </main>
 
           <footer>
             <p><${ModelGenerationInfo} /></p>
